@@ -6,11 +6,14 @@ import { Avatar } from "@heroui/react";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const NavbarPage = () => {
   const pathname = usePathname();
   const router = useRouter();
+
   const [open, setOpen] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   const { data: session } = authClient.useSession?.() || {};
   const user = session?.user;
@@ -25,14 +28,17 @@ const NavbarPage = () => {
 
   const handleLogout = async () => {
     await authClient.signOut();
+
     setOpen(false);
-    toast.success("Logout successFully")
+    setMobileMenu(false);
+
+    toast.success("Logout successfully");
     router.push("/");
   };
 
   return (
     <nav className="w-full sticky top-0 z-50 bg-[#020817]/80 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-600 via-purple-600 to-blue-600 flex items-center justify-center text-white font-extrabold text-lg">
@@ -40,16 +46,17 @@ const NavbarPage = () => {
           </div>
 
           <div>
-            <h1 className="text-2xl font-extrabold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-blue-400 bg-clip-text text-transparent">
+            <h1 className="text-xl lg:text-2xl font-extrabold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-blue-400 bg-clip-text text-transparent">
               IdeaVault
             </h1>
-            <p className="text-[10px] uppercase tracking-[4px] text-slate-500">
+
+            <p className="text-[9px] lg:text-[10px] uppercase tracking-[3px] lg:tracking-[4px] text-slate-500">
               Creative Platform
             </p>
           </div>
         </Link>
 
-        {/* Menu */}
+        {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2 rounded-full backdrop-blur-xl">
           {menuItems
             .filter((item) => (item.auth ? user : true))
@@ -69,7 +76,15 @@ const NavbarPage = () => {
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-4 relative">
+        <div className="flex items-center gap-3 relative">
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenu(!mobileMenu)}
+            className="lg:hidden text-white text-xl"
+          >
+            {mobileMenu ? <FaTimes /> : <FaBars />}
+          </button>
+
           {/* USER LOGGED IN */}
           {user ? (
             <div className="relative">
@@ -77,7 +92,7 @@ const NavbarPage = () => {
                 onClick={() => setOpen(!open)}
                 className="p-[2px] rounded-full bg-gradient-to-r from-violet-500 to-blue-500 cursor-pointer"
               >
-                <Avatar className="w-11 h-11 border-2 border-[#020817]">
+                <Avatar className="w-10 h-10 lg:w-11 lg:h-11 border-2 border-[#020817]">
                   <Avatar.Image
                     alt="User"
                     src={
@@ -85,6 +100,7 @@ const NavbarPage = () => {
                       "https://img.heroui.chat/image/avatar?w=200&h=200&u=3"
                     }
                   />
+
                   <Avatar.Fallback>U</Avatar.Fallback>
                 </Avatar>
               </div>
@@ -111,7 +127,7 @@ const NavbarPage = () => {
             </div>
           ) : (
             /* USER NOT LOGGED IN */
-            <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2">
               <Link
                 href="/login"
                 className="px-4 py-2 text-sm rounded-full bg-white/5 border border-white/10 text-slate-200 hover:bg-violet-500/10"
@@ -129,6 +145,51 @@ const NavbarPage = () => {
           )}
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenu && (
+        <div className="lg:hidden px-4 pb-4">
+          <div className="bg-[#0b1020] border border-white/10 rounded-2xl p-4 flex flex-col gap-2">
+            {menuItems
+              .filter((item) => (item.auth ? user : true))
+              .map((item) => (
+                <Link
+                  key={item.path}
+                  href={item.path}
+                  onClick={() => setMobileMenu(false)}
+                  className={`px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    pathname === item.path
+                      ? "bg-gradient-to-r from-violet-600 to-blue-600 text-white"
+                      : "text-slate-300 hover:bg-violet-500/10 hover:text-violet-400"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+            {/* Mobile Auth Buttons */}
+            {!user && (
+              <div className="flex flex-col gap-2 mt-2">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenu(false)}
+                  className="px-4 py-3 text-center rounded-xl bg-white/5 border border-white/10 text-slate-200"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenu(false)}
+                  className="px-4 py-3 text-center rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 text-white"
+                >
+                  Register
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

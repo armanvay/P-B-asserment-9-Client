@@ -9,7 +9,7 @@ const InteractionCard = ({ data }) => {
   return (
     <div className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#0B1120] p-4 transition duration-300 hover:border-cyan-500/40 hover:bg-[#111827]">
       {/* Left Side */}
-      <div className="flex items-center gap-4">
+      <div className="md:flex items-center gap-4">
         {/* Image */}
         <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-white/10">
           <Image
