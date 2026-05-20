@@ -10,43 +10,56 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { FaGoogle } from "react-icons/fa";
 
 const LoginPage = () => {
+  const searchParams = useSearchParams();
+
+  // redirect path
+  const redirect = searchParams.get("redirect") || "/";
+
+  // EMAIL LOGIN
   const onSubmit = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log({ email, password });
-
     const { data, error } = await authClient.signIn.email({
-      email: email, // required
-      password: password, // required
+      email,
+      password,
       rememberMe: true,
-      callbackURL: "/",
+
+      // after login redirect
+      callbackURL: redirect,
     });
+
     if (data) {
-      toast.success("Signup successful 🎉");
-    } else if (error) {
-      toast.error("Login failed ❌");
+      toast.success("Login successful 🎉");
+    }
+
+    if (error) {
+      toast.error(error.message || "Login failed ❌");
     }
   };
 
+  // GOOGLE LOGIN
   const handelGoogle = async () => {
     try {
-      const data = await authClient.signIn.social({
+      await authClient.signIn.social({
         provider: "google",
+
+        // after google login redirect
+        callbackURL: redirect,
       });
 
-      if (data) {
-        toast.success("Google Login Successful");
-      }
+      toast.success("Google Login Successful");
     } catch (error) {
-      toast.error("Google Login Failed");
+      toast.error("Google Login Failed ❌");
     }
   };
 
@@ -56,6 +69,7 @@ const LoginPage = () => {
         {/* Heading */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-white">Welcome Back</h1>
+
           <p className="text-gray-400 mt-2 text-sm">Login to your account</p>
         </div>
 
@@ -120,6 +134,7 @@ const LoginPage = () => {
 
           {/* Buttons */}
           <div className="flex flex-col gap-3 mt-2">
+            {/* Login Button */}
             <Button
               type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl h-12 shadow-lg hover:scale-[1.02] transition-all duration-300"
@@ -127,15 +142,19 @@ const LoginPage = () => {
               <Check />
               Login
             </Button>
+
+            {/* Google Login */}
             <Button
+              type="button"
               onClick={handelGoogle}
               variant="outline"
-              className="w-full hover:bg-blue-500   text-white font-semibold rounded-xl h-12 shadow-lg hover:scale-[1.02] transition-all duration-300"
+              className="w-full hover:bg-blue-500 text-white font-semibold rounded-xl h-12 shadow-lg hover:scale-[1.02] transition-all duration-300"
             >
-              <FaGoogle></FaGoogle>
-              Sing in Google
+              <FaGoogle />
+              Sign in Google
             </Button>
 
+            {/* Reset */}
             <Button
               type="reset"
               variant="secondary"
@@ -146,7 +165,7 @@ const LoginPage = () => {
           </div>
         </form>
 
-        {/* Bottom Text */}
+        {/* Bottom */}
         <p className="text-center text-sm text-gray-400 mt-6">
           Dont have an account?{" "}
           <Link href="/register">
