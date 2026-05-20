@@ -12,9 +12,10 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { FaGoogle } from "react-icons/fa";
 
 const LoginPage = () => {
-  const onSubmit = async(e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
@@ -23,16 +24,30 @@ const LoginPage = () => {
     console.log({ email, password });
 
     const { data, error } = await authClient.signIn.email({
-    email: email, // required
-    password: password, // required
-    rememberMe: true,
-    callbackURL: "/",
-});
- if (data) {
-   toast.success("Signup successful 🎉");
- } else if (error) {
-   toast.error("Login failed ❌");
- }
+      email: email, // required
+      password: password, // required
+      rememberMe: true,
+      callbackURL: "/",
+    });
+    if (data) {
+      toast.success("Signup successful 🎉");
+    } else if (error) {
+      toast.error("Login failed ❌");
+    }
+  };
+
+  const handelGoogle = async () => {
+    try {
+      const data = await authClient.signIn.social({
+        provider: "google",
+      });
+
+      if (data) {
+        toast.success("Google Login Successful");
+      }
+    } catch (error) {
+      toast.error("Google Login Failed");
+    }
   };
 
   return (
@@ -96,13 +111,21 @@ const LoginPage = () => {
           </TextField>
 
           {/* Buttons */}
-          <div className="flex gap-3 mt-2">
+          <div className="flex flex-col gap-3 mt-2">
             <Button
               type="submit"
               className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl h-12 shadow-lg hover:scale-[1.02] transition-all duration-300"
             >
               <Check />
               Login
+            </Button>
+            <Button
+              onClick={handelGoogle}
+              variant="outline"
+              className="w-full hover:bg-blue-500   text-white font-semibold rounded-xl h-12 shadow-lg hover:scale-[1.02] transition-all duration-300"
+            >
+              <FaGoogle></FaGoogle>
+              Sing in Google
             </Button>
 
             <Button
