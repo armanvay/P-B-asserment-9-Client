@@ -92,6 +92,14 @@ const LoginPage = () => {
               if (value.length < 8) {
                 return "Password must be at least 8 characters";
               }
+
+              if (!/[A-Z]/.test(value)) {
+                return "Password must include at least one uppercase letter";
+              }
+
+              if (!/[a-z]/.test(value)) {
+                return "Password must include at least one lowercase letter";
+              }
             }}
           >
             <Label className="text-gray-200">Password</Label>
@@ -104,7 +112,7 @@ const LoginPage = () => {
             />
 
             <Description className="text-xs text-gray-400">
-              Must be at least 8 characters
+              Must be at least 8 characters, include uppercase and lowercase
             </Description>
 
             <FieldError />

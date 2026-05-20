@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Avatar } from "@heroui/react";
+import { Avatar, Switch } from "@heroui/react";
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaMoon, FaSun, FaTimes } from "react-icons/fa";
+import ThemeToggler from "@/lib/ThemeToggler";
 
 const NavbarPage = () => {
   const pathname = usePathname();
@@ -17,6 +18,7 @@ const NavbarPage = () => {
 
   const { data: session } = authClient.useSession?.() || {};
   const user = session?.user;
+
 
   const menuItems = [
     { path: "/", label: "Home", auth: false },
@@ -40,11 +42,8 @@ const NavbarPage = () => {
     <nav className="w-full sticky top-0 z-50 bg-[#020817]/80 backdrop-blur-2xl border-b border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
       <div className="max-w-7xl mx-auto px-4 lg:px-6 py-4 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-violet-600 via-purple-600 to-blue-600 flex items-center justify-center text-white font-extrabold text-lg">
-            I
-          </div>
-
+        <div className="flex items-center gap-3">
+            <ThemeToggler></ThemeToggler>
           <div>
             <h1 className="text-xl lg:text-2xl font-extrabold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-blue-400 bg-clip-text text-transparent">
               IdeaVault
@@ -54,7 +53,7 @@ const NavbarPage = () => {
               Creative Platform
             </p>
           </div>
-        </Link>
+        </div>
 
         {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-2 rounded-full backdrop-blur-xl">

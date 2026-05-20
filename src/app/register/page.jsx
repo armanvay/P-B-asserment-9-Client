@@ -5,6 +5,7 @@ import { Check } from "@gravity-ui/icons";
 import {
   Button,
   Description,
+  FieldError,
   Input,
   Label,
   TextField,
@@ -76,17 +77,38 @@ const RegisterPage = () => {
             <Input name="email" type="email" placeholder="Your Email" />
           </TextField>
 
-          <TextField isRequired>
+          <TextField
+            isRequired
+            name="password"
+            type="password"
+            validate={(value) => {
+              if (value.length < 8) {
+                return "Password must be at least 8 characters";
+              }
+
+              if (!/[A-Z]/.test(value)) {
+                return "Password must include at least one uppercase letter";
+              }
+
+              if (!/[a-z]/.test(value)) {
+                return "Password must include at least one lowercase letter";
+              }
+            }}
+          >
             <Label className="text-gray-200">Password</Label>
+
             <Input
               name="password"
               type="password"
               placeholder="Enter your password"
+              className="bg-white/10 text-white border border-white/10 rounded-xl"
             />
 
             <Description className="text-xs text-gray-400">
-              Must be at least 8 characters
+              Must be at least 8 characters, include uppercase and lowercase
             </Description>
+
+            <FieldError />
           </TextField>
 
           <div className="flex gap-3 mt-2">

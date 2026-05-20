@@ -1,3 +1,4 @@
+import ComentHistor from '@/component/ComentHistor';
 import CommentBox from '@/component/CommentBox';
 import { getDetails } from '@/lib/allData';
 import { Button } from '@heroui/react';
@@ -9,7 +10,9 @@ import { FaRightFromBracket } from 'react-icons/fa6';
 const IdeasDetis = async({params}) => {
     const {id}=await params
     const idea = await getDetails(id);
-    
+
+    console.log(idea)
+
  
     return (
       <div className="max-w-6xl mx-auto px-4 py-10">

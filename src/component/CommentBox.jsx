@@ -11,6 +11,8 @@ const CommentBox = ({ idea }) => {
   const session = authClient.useSession?.();
   const user = session?.data?.user;
 
+
+
   const handleCommentSubmit = async () => {
  
 
@@ -54,6 +56,10 @@ const CommentBox = ({ idea }) => {
       setLoading(false);
     }
   };
+
+
+
+
 
   return (
     <div className="space-y-3">

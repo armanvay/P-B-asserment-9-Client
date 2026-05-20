@@ -1,47 +1,51 @@
 "use client";
-import { ComboBox, Description, Input, Label, ListBox } from "@heroui/react";
+
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Filter = () => {
+  const router = useRouter();
+
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+
+  const updateURL = (s, c) => {
+    const params = new URLSearchParams();
+
+    if (s) params.set("search", s);
+    if (c) params.set("category", c);
+
+    const query = params.toString();
+    router.push(query ? `/ideas?${query}` : `/ideas`);
+  };
+
   return (
-    <div>
-      <ComboBox className="w-[256px]">
-        <ComboBox.InputGroup>
-          <Input placeholder="ALL Idea..." />
-          <ComboBox.Trigger />
-        </ComboBox.InputGroup>
-        <ComboBox.Popover>
-          <ListBox>
-            <ListBox.Item id="idea" textValue="ALL Idea">
-              ALL Idea
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-            <ListBox.Item id="aardvark" textValue="Aardvark">
-              Aardvark
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-            <ListBox.Item id="cat" textValue="Cat">
-              Cat
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-            <ListBox.Item id="dog" textValue="Dog">
-              Dog
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-            <ListBox.Item id="kangaroo" textValue="Kangaroo">
-              Kangaroo
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-            <ListBox.Item id="panda" textValue="Panda">
-              Panda
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-            <ListBox.Item id="snake" textValue="Snake">
-              Snake
-              <ListBox.ItemIndicator />
-            </ListBox.Item>
-          </ListBox>
-        </ComboBox.Popover>
-      </ComboBox>
+    <div className="flex gap-2 items-center">
+      <input
+        className="border px-3 py-2 rounded-md w-48"
+        placeholder="Search ideas..."
+        value={search}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          updateURL(e.target.value, category);
+        }}
+      />
+
+      <select
+        className="border px-3 py-2 rounded-md"
+        value={category}
+        onChange={(e) => {
+          setCategory(e.target.value);
+          updateURL(search, e.target.value);
+        }}
+      >
+        <option value="">All Ideas</option>
+        <option value="Tech">Tech</option>
+        <option value="AI">AI</option>
+        <option value="Health">Health</option>
+        <option value="Education">Education</option>
+        <option value="Finance">Finance</option>
+      </select>
     </div>
   );
 };

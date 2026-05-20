@@ -55,16 +55,15 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="bg-white py-20">
+    <section className=" py-20">
       {/* Heading */}
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="text-4xl font-extrabold text-gray-900 lg:text-5xl">
-          Make every step user-centric
+          Turn every step into a smarter experience
         </h1>
 
         <p className="mt-5 text-gray-500">
-          Build a modern startup experience with collaboration, innovation, and
-          seamless interactions.
+          Make every interaction simple, fast, and meaningful
         </p>
       </div>
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import NavbarPage from "@/component/Navbar";
 import Footer from "@/component/Footer";
 import { Toaster } from "react-hot-toast";
+import NextThemeProvider from "@/providers/NextThemeProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,16 +26,19 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${poppins.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <NavbarPage />
+        <NextThemeProvider>
+          <NavbarPage />
 
-        {children}
+          {children}
 
-        <Toaster position="top-center" />
+          <Toaster position="top-center" />
 
-        <Footer />
+          <Footer />
+        </NextThemeProvider>
       </body>
     </html>
   );
