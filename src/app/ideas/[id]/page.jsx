@@ -1,4 +1,3 @@
-import ComentHistor from '@/component/ComentHistor';
 import CommentBox from '@/component/CommentBox';
 import { getDetails } from '@/lib/allData';
 import { auth } from '@/lib/auth';
