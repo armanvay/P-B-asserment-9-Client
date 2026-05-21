@@ -28,8 +28,12 @@ export const getDetails = async (id ,token) => {
 };
 
 // My ideas (logged-in user)
-export const getMyIdeas = async (email) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/my-ideas/${email}`);
+export const getMyIdeas = async (email ,token) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/my-ideas/${email}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
   const data = await res.json();
   return data;
 };

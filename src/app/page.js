@@ -1,7 +1,8 @@
 import FeaturesSection from "@/component/FeaturesSection";
+import Future from "@/component/Future";
 import Hero from "@/component/Hero";
 import TrendingIdea from "@/component/TrendingIdea";
-import Image from "next/image";
+
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <Hero></Hero>
       <TrendingIdea></TrendingIdea>
       <FeaturesSection></FeaturesSection>
+      <Future></Future>
      
     </div>
   );

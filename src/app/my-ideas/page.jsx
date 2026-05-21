@@ -12,6 +12,12 @@ const MyIdeasPage = async () => {
   const session = await auth.api.getSession({
     headers: headerList,
   });
+     
+  const {token} =await auth.api.getToken({
+          headers: await headers()
+      })
+  
+      console.log(token)
 
   const email = session?.user?.email;
 
@@ -19,7 +25,7 @@ const MyIdeasPage = async () => {
     return <p className="text-white">Not logged in</p>;
   }
 
-  const ideas = await getMyIdeas(email);
+  const ideas = await getMyIdeas(email ,token);
 
   console.log(ideas);
 
