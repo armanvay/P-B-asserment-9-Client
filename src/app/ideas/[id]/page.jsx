@@ -1,7 +1,9 @@
 import ComentHistor from '@/component/ComentHistor';
 import CommentBox from '@/component/CommentBox';
 import { getDetails } from '@/lib/allData';
+import { auth } from '@/lib/auth';
 import { Button } from '@heroui/react';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -9,9 +11,16 @@ import { FaRightFromBracket } from 'react-icons/fa6';
 
 const IdeasDetis = async({params}) => {
     const {id}=await params
-    const idea = await getDetails(id);
 
-    console.log(idea)
+    const {token} =await auth.api.getToken({
+        headers: await headers()
+    })
+    
+    console.log(token)
+
+
+    const idea = await getDetails(id, token);
+
 
  
     return (

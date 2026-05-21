@@ -17,8 +17,12 @@ export const gettendingData = async () => {
   return idea;
 };
 
-export const getDetails = async (id) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/ideas/${id}`);
+export const getDetails = async (id ,token) => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/ideas/${id}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  });
   const result = await res.json();
   return result;
 };
