@@ -11,21 +11,21 @@ const CommentBox = ({ idea }) => {
   const session = authClient.useSession?.();
   const user = session?.data?.user;
 
-
-
   const handleCommentSubmit = async () => {
- 
-
     if (!commentText.trim()) return;
 
     try {
       setLoading(true);
 
+      const { data: tokenData } = await authClient.token();
+
+      const token = tokenData?.token; // ✅ IMPORTANT FIX
+console.log(token)
       const comment = {
         imageURL: idea?.imageURL,
         estimatedBudget: idea?.estimatedBudget,
         title: idea?.title,
-        ideaId: idea._id, // important: backend link
+        ideaId: idea._id,
         text: commentText,
         userEmail: user.email,
         userName: user.name,
@@ -36,30 +36,26 @@ const CommentBox = ({ idea }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`, // ✅ now correct
         },
         body: JSON.stringify(comment),
       });
 
       const data = await res.json();
-      console.log(data);
 
-      if (data) {
-        toast.success("Comment added successfully ");
-
+      if (res.ok) {
+        toast.success("Comment added successfully");
         setCommentText("");
+      } else {
+        toast.error(data.message || "Failed to add comment");
       }
     } catch (error) {
       toast.error("Something went wrong!");
-
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
-
-
-
-
 
   return (
     <div className="space-y-3">
